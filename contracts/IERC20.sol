@@ -9,7 +9,7 @@ interface IERC20 {
 
         function symbol() external view returns (string memory);
 
-        // function decimals() external view returns (uint256);
+        function decimals() external view returns (uint256);
 
         function totalSupply() external view returns (uint256);
 
