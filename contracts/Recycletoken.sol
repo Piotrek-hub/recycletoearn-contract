@@ -18,10 +18,11 @@ contract Recycletoken is IERC20 {
     uint256 private _decimals = 18;
     uint256 private _totalSupply = 1_000_000 * (10 ** _decimals);
 
-    address private _owner;
+    address public _owner;
 
     constructor() {
-        _balances[0xE546614070D70C5E075fEC98aBC3EF6275C63d3b] = _totalSupply;
+        _owner = msg.sender;
+        _balances[_owner] = _totalSupply;
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
 

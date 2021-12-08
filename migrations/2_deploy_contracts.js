@@ -1,5 +1,5 @@
-const Recycletoken = artifacts.require("recycletoken");
+const Recycle= artifacts.require("Recycle");
 
 module.exports = function (deployer) {
-  deployer.deploy(Recycletoken);
+  deployer.deploy(Recycle);
 };
