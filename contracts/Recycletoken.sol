@@ -1,7 +1,86 @@
 pragma solidity ^0.8.0;
 
-import "./IERC20.sol";
 import "./math/SafeMath.sol";
+
+/**
+ * @title ERC20 interface
+ * @dev see https://github.com/ethereum/EIPs/issues/20
+ */
+interface IERC20 {
+    /**
+     * @dev Returns the amount of tokens in existence.
+     */
+    function totalSupply() external view returns (uint256);
+
+    /**
+     * @dev Returns the amount of tokens owned by `account`.
+     */
+    function balanceOf(address account) external view returns (uint256);
+
+    /**
+     * @dev Moves `amount` tokens from the caller's account to `recipient`.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a {Transfer} event.
+     */
+    function transfer(address recipient, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through {transferFrom}. This is
+     * zero by default.
+     *
+     * This value changes when {approve} or {transferFrom} are called.
+     */
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    /**
+     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * IMPORTANT: Beware that changing an allowance with this method brings the risk
+     * that someone may use both the old and the new allowance by unfortunate
+     * transaction ordering. One possible solution to mitigate this race
+     * condition is to first reduce the spender's allowance to 0 and set the
+     * desired value afterwards:
+     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+     *
+     * Emits an {Approval} event.
+     */
+    function approve(address spender, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Moves `amount` tokens from `sender` to `recipient` using the
+     * allowance mechanism. `amount` is then deducted from the caller's
+     * allowance.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a {Transfer} event.
+     */
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
+
+    /**
+     * @dev Emitted when `value` tokens are moved from one account (`from`) to
+     * another (`to`).
+     *
+     * Note that `value` may be zero.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    /**
+     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+     * a call to {approve}. `value` is the new allowance.
+     */
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+
 
 /**
  * @title Standard ERC20 token
@@ -10,7 +89,26 @@ import "./math/SafeMath.sol";
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
  * Originally based on code by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
  */
-contract Recycletoken is IERC20 {
+
+ interface IERC20Metadata is IERC20 {
+    /**
+     * @dev Returns the name of the token.
+     */
+    function name() external view returns (string memory);
+
+    /**
+     * @dev Returns the symbol of the token.
+     */
+    function symbol() external view returns (string memory);
+
+    /**
+     * @dev Returns the decimals places of the token.
+     */
+    function decimals() external view returns (uint8);
+}
+
+
+contract ERC20 is IERC20, IERC20Metadata {
     using SafeMath for uint256;
 
     string private _name = "RecycleToken";
@@ -20,10 +118,9 @@ contract Recycletoken is IERC20 {
 
     address public _owner;
 
-    constructor() {
-        _owner = msg.sender;
-        _balances[_owner] = _totalSupply;
-        emit Transfer(address(0), msg.sender, _totalSupply);
+    constructor(string memory name_, string memory symbol_) {
+        _name = name_;
+        _symbol = symbol_;
     }
 
     mapping(address => uint256) private _balances;
@@ -33,38 +130,34 @@ contract Recycletoken is IERC20 {
     /**
      * @dev Name of token
      */
-    function name() public view returns (string memory) {
+    function name() public view virtual override returns (string memory) {
         return _name;
     }
 
     /**
-     * @dev Symbol of token
+     * @dev Returns the symbol of the token, usually a shorter version of the
+     * name.
      */
-    function symbol() public view returns (string memory) {
+    function symbol() public view virtual override returns (string memory) {
         return _symbol;
     }
 
     /**
      * @dev Token decimals
      */
-    function decimals() public view returns (uint256) {
-        return _decimals;
+    function decimals() public view virtual override returns (uint8) {
+        return 18;
     }
 
     /**
      * @dev Total number of tokens in existence
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public view virtual override returns (uint256) {
         return _totalSupply;
     }
 
-    /**
-     * @dev Gets the balance of the specified address.
-     * @param owner The address to query the balance of.
-     * @return An uint256 representing the amount owned by the passed address.
-     */
-    function balanceOf(address owner) public view returns (uint256) {
-        return _balances[owner];
+    function balanceOf(address account) public view virtual override returns (uint256) {
+        return _balances[account];
     }
 
     /**
@@ -224,5 +317,12 @@ contract Recycletoken is IERC20 {
             amount
         );
         _burn(account, amount);
+    }
+}
+
+contract RecycleToken is ERC20 {
+    //It all started here...
+    constructor() ERC20("RecycleToken", "RCT") {
+        _mint(msg.sender, 2137000000 * (10 ** uint256(decimals())));
     }
 }

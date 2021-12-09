@@ -6,7 +6,7 @@ import "./Recycletoken.sol";
 contract Recycle {
     uint256 userCount; 
     uint256 private levelGap = 10;
-    Recycletoken recycleToken;
+    RecycleToken recycleToken;
 
     event userScored(
         uint userId,
