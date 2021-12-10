@@ -24,6 +24,10 @@ contract Recycle {
 
     mapping(uint256 => User) public users;
 
+    constructor(RecycleToken _recycleToken) {
+        recycleToken = _recycleToken;
+    }
+
     function addUser() public {
         User storage user = users[userCount];
         user.id = userCount;
@@ -32,7 +36,7 @@ contract Recycle {
         userCount++;
     }
 
-    function scored(uint _userId, uint _score, string memory achievementType) public {
+    function scored(uint _userId, uint _score, string memory achievementType) public returns (uint){
         require(
             _userId < userCount,
             "User don't exists"
@@ -40,10 +44,11 @@ contract Recycle {
  
         users[_userId].totalAchievementScore += _score; 
         users[_userId].achievementType[achievementType] += _score;
-        recycleToken.transfer(users[_userId].addr, 1);
+        // recycleToken.transfer(users[_userId].addr, 1);
 
         emit userScored(_userId, users[_userId].totalAchievementScore, users[_userId].achievementType[achievementType], achievementType);
         
+        return recycleToken.balanceOf(msg.sender);
     }
 
 
