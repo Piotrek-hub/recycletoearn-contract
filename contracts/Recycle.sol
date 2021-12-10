@@ -28,7 +28,21 @@ contract Recycle {
         recycleToken = _recycleToken;
     }
 
+    function checkIfUserExists(address _user) internal view returns(bool){
+        for(uint i = 0; i < userCount; i++) {
+            if(users[i].addr == _user){
+                return true;
+            }
+        }
+        return false;
+    }
+
     function addUser() public {
+        require(
+            checkIfUserExists(msg.sender),
+            "User already exists"
+        );
+
         User storage user = users[userCount];
         user.id = userCount;
         user.totalAchievementScore = 0;

@@ -5,5 +5,4 @@ module.exports = async (deployer) => {
   deployer.deploy(RecycleToken).then((token) => {
     deployer.deploy(RecycleContract, token.address);
   })
-  
 };
