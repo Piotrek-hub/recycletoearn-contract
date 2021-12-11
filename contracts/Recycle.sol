@@ -15,6 +15,11 @@ contract Recycle {
         string achievementType
     );
 
+    event userAdded(
+        uint userId,
+        address addr
+    );
+
     struct User {
         uint256 id;
         uint256 totalAchievementScore;
@@ -29,12 +34,12 @@ contract Recycle {
     }
 
     function checkIfUserExists(address _user) internal view returns(bool){
-        for(uint i = 0; i < userCount; i++) {
-            if(users[i].addr == _user){
-                return true;
+        for (uint256 i = 0; i < userCount; i++) {
+            if (_user == users[i].addr) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     function addUser() public {
@@ -47,6 +52,7 @@ contract Recycle {
         user.id = userCount;
         user.totalAchievementScore = 0;
         user.addr = msg.sender;
+        emit userAdded(user.id, user.addr);
         userCount++;
     }
 
