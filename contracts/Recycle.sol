@@ -64,7 +64,9 @@ contract Recycle {
  
         users[_userId].totalAchievementScore += _score; 
         users[_userId].achievementType[achievementType] += _score;
-        // recycleToken.transfer(users[_userId].addr, 1);
+
+
+        recycleToken.transferFrom(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db,msg.sender, _score);
 
         emit userScored(_userId, users[_userId].totalAchievementScore, users[_userId].achievementType[achievementType], achievementType);
         

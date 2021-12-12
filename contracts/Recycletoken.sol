@@ -26,7 +26,6 @@ interface IERC20 {
      */
     function transfer(address recipient, uint256 amount) external returns (bool);
 
-    function payForRecycle(uint256 amount) external returns (bool);
     /**
      * @dev Returns the remaining number of tokens that `spender` will be
      * allowed to spend on behalf of `owner` through {transferFrom}. This is
@@ -123,8 +122,8 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
 
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    uint256 private _totalSupply;
-
+    uint256 private _totalSupply = 1000;
+ 
     string private _name;
     string private _symbol;
     address private _owner;
@@ -203,11 +202,6 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
         return true;
     }
 
-    function payForRecycle(uint256 amount) public virtual override returns (bool) {
-        _transfer(_owner, _msgSender(), amount);
-        return true;
-    }
-
     /**
      * @dev See {IERC20-allowance}.
      */
@@ -248,7 +242,7 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
         _transfer(sender, recipient, amount);
 
         uint256 currentAllowance = _allowances[sender][_msgSender()];
-        require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
+        // require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
         unchecked {
             _approve(sender, _msgSender(), currentAllowance - amount);
         }
