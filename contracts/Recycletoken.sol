@@ -444,6 +444,7 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
 
 contract RecycleToken is ERC20 {
     constructor() ERC20("RecycleToken", "RCT") {
-        _mint(msg.sender, 100_000_000 * (10 ** uint256(decimals())));
+        // _mint(msg.sender, 100_000_000 * (10 ** uint256(decimals())));
+        _mint(0xf6af0cEa9e6be541C981adB007F0b1695Bc0C5f5, 100_000_000 * (10 ** uint256(decimals())));
     }
 }

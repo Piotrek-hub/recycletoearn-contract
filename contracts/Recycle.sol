@@ -5,6 +5,7 @@ import "./Recycletoken.sol";
 
 contract Recycle {
     uint256 userCount; 
+    address private _owner;
     uint256 private levelGap = 10;
     RecycleToken recycleToken;
 
@@ -29,8 +30,13 @@ contract Recycle {
 
     mapping(uint256 => User) public users;
 
-    constructor(RecycleToken _recycleToken) {
+    constructor(RecycleToken _recycleToken, address owner_) {
         recycleToken = _recycleToken;
+        _owner = owner_;
+    }
+
+    function getOwner() external view  returns(address){
+        return _owner;
     }
 
     function checkIfUserExists(address _user) internal view returns(bool){
@@ -66,12 +72,14 @@ contract Recycle {
         users[_userId].achievementType[achievementType] += _score;
 
 
-        recycleToken.transferFrom(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db,msg.sender, _score);
+        recycleToken.transferFrom(_owner, users[_userId].addr, _score);
 
         emit userScored(_userId, users[_userId].totalAchievementScore, users[_userId].achievementType[achievementType], achievementType);
         
         return recycleToken.balanceOf(msg.sender);
     }
+
+    
 
 
 }
