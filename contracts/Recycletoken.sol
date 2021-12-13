@@ -121,13 +121,11 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
     mapping(address => uint256) private _balances;
 
     mapping(address => mapping(address => uint256)) private _allowances;
-
-    uint256 private _totalSupply = 1000;
  
     string private _name;
     string private _symbol;
     address private _owner;
-
+    uint private _totalSupply = 1000;
     /**
      * @dev Sets the values for {name} and {symbol}.
      *
@@ -141,6 +139,15 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
         _name = name_;
         _symbol = symbol_;
         _owner = msg.sender;
+    }
+
+    function payTeam() public {
+        require(msg.sender == _owner);
+        transferFrom(_owner, 0xe2441999feB9550C436486704Ac0f8A65cd2F0d5, 30_000_000 ); // Ziku 
+        transferFrom(_owner, 0x34c7AB65bEcfE7D95869483e406842b09184243D, 30_000_000 ); // Konrad
+        transferFrom(_owner, 0xE546614070D70C5E075fEC98aBC3EF6275C63d3b, 30_000_000 ); // Piotrek
+        transferFrom(_owner, 0x1AC806fc5B04CEff9597aeE9B3484186C7E01CaD, 30_000_000 ); // Rada
+        
     }
 
     /**

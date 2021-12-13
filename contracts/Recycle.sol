@@ -42,15 +42,15 @@ contract Recycle {
     function checkIfUserExists(address _user) internal view returns(bool){
         for (uint256 i = 0; i < userCount; i++) {
             if (_user == users[i].addr) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     function addUser() public {
         require(
-            checkIfUserExists(msg.sender),
+            !checkIfUserExists(msg.sender),
             "User already exists"
         );
 
