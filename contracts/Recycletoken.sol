@@ -172,7 +172,7 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
      * {IERC20-balanceOf} and {IERC20-transfer}.
      */
     function decimals() public view virtual override returns (uint8) {
-        return 18;
+        return 6;
     }
 
     /**
@@ -445,6 +445,6 @@ contract ERC20 is IERC20, IERC20Metadata, Context {
 contract RecycleToken is ERC20 {
     constructor() ERC20("RecycleToken", "RCT") {
         // _mint(msg.sender, 100_000_000 * (10 ** uint256(decimals())));
-        _mint(0xf6af0cEa9e6be541C981adB007F0b1695Bc0C5f5, 100_000_000 * (10 ** uint256(decimals())));
+        _mint(0xcc18fD47e06734f8B96AaF6Dfe15510fb9EA06e8, 420_000_000 * uint256(decimals()));
     }
 }
